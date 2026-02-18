@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petal Chain - 2026 SA University & College Finder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .hero-bg { background: radial-gradient(circle at top right, #1e293b, #000000); }
+        .card-hover:hover { transform: translateY(-8px); border-color: #3b82f6; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        select { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1.5em 1.5em; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 leading-relaxed">
+
+    <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
+                    <i class="fas fa-link text-white text-lg"></i>
+                </div>
+                <span class="text-2xl font-bold tracking-tighter text-slate-900">Petal Chain</span>
+            </div>
+            <div class="hidden md:flex gap-8 items-center font-semibold text-slate-600 text-sm">
+                <a href="#" class="text-blue-600">Home</a>
+                <a href="#finder" class="hover:text-blue-600 transition-colors">Find Institution</a>
+                <a href="https://www.dhet.gov.za" target="_blank" class="hover:text-blue-600 transition-colors">DHET Portal</a>
+                <button class="bg-black text-white px-6 py-2.5 rounded-full hover:bg-slate-800 transition-all">Apply Now</button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-bg text-white py-24 px-6 overflow-hidden relative">
+        <div class="max-w-5xl mx-auto text-center relative z-10">
+            <span class="inline-block py-1 px-4 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold mb-6 border border-blue-500/30 uppercase">Academic Year 2026</span>
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-8 tracking-tight">The Gateway to <span class="text-blue-500">Higher Ed.</span></h1>
+            <p class="text-xl text-slate-400 mb-12 max-w-2xl mx-auto font-light">Comprehensive directory of South Africa's 26 Public Universities, 50 TVET Colleges, and leading Private Institutions (DHET-registered).</p>
+            
+            <div class="relative max-w-3xl mx-auto" id="finder">
+                <i class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                <input type="text" id="searchInput" onkeyup="filterColleges()" 
+                    placeholder="Search by name or city..." 
+                    class="w-full pl-16 pr-8 py-6 rounded-3xl text-slate-900 text-lg focus:ring-4 focus:ring-blue-500/50 outline-none shadow-2xl transition-all border-none">
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 -mt-10 relative z-20">
+        <!-- Stats: Total first, then counts in pairs (2 per row) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
+                <p class="text-4xl font-extrabold text-slate-900" id="totalCount">0</p>
+                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-2">Total Found</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
+                <p class="text-4xl font-extrabold text-blue-600">26</p>
+                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-2">Public Universities</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
+                <p class="text-4xl font-extrabold text-emerald-600">50</p>
+                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-2">Public TVET Colleges</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
+                <p class="text-4xl font-extrabold text-purple-600">38</p>
+                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-2">Private Institutions</p>
+            </div>
+        </div>
+
+        <!-- Province filter -->
+        <div class="mb-8">
+            <select id="provinceFilter" onchange="filterColleges()" class="w-full max-w-xs mx-auto block bg-black text-white p-4 rounded-2xl shadow-lg font-bold text-sm outline-none cursor-pointer hover:bg-slate-800 transition-all">
+                <option value="all">All Provinces</option>
+                <option value="Gauteng">Gauteng</option>
+                <option value="Western Cape">Western Cape</option>
+                <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                <option value="Eastern Cape">Eastern Cape</option>
+                <option value="Free State">Free State</option>
+                <option value="Limpopo">Limpopo</option>
+                <option value="Mpumalanga">Mpumalanga</option>
+                <option value="North West">North West</option>
+                <option value="Northern Cape">Northern Cape</option>
+                <option value="National">National (Online/Multi)</option>
+            </select>
+        </div>
+
+        <!-- Filter buttons -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <button onclick="setFilter('university')" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:border-blue-500 transition-all text-center group">
+                <i class="fas fa-building-columns text-blue-600 text-3xl mb-3"></i>
+                <p class="text-base font-bold block">Universities</p>
+            </button>
+            <button onclick="setFilter('tvet')" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:border-blue-500 transition-all text-center group">
+                <i class="fas fa-tools text-blue-600 text-3xl mb-3"></i>
+                <p class="text-base font-bold block">TVET Colleges</p>
+            </button>
+            <button onclick="setFilter('private')" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:border-blue-500 transition-all text-center group">
+                <i class="fas fa-certificate text-blue-600 text-3xl mb-3"></i>
+                <p class="text-base font-bold block">Private Higher Ed</p>
+            </button>
+        </div>
+
+        <div id="collegeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-24">
+        </div>
+    </main>
+
+    <footer class="bg-black text-slate-500 py-16 border-t border-slate-900">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-link text-white text-xs"></i>
+                </div>
+                <span class="text-xl font-bold text-white tracking-tighter">Petal Chain</span>
+            </div>
+            <p class="text-sm">Source: DHET 2026 Directory & Registers. Registered Institutions only. Private list curated for leading providers.</p>
+            <div class="flex gap-6 text-xl">
+                <i class="fab fa-twitter hover:text-white cursor-pointer transition-colors"></i>
+                <i class="fab fa-linkedin hover:text-white cursor-pointer transition-colors"></i>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const institutions = [
+            // 26 PUBLIC UNIVERSITIES
+            { name: "University of Cape Town (UCT)", type: "university", province: "Western Cape", link: "www.uct.ac.za" },
+            { name: "University of the Witwatersrand (Wits)", type: "university", province: "Gauteng", link: "www.wits.ac.za" },
+            { name: "University of Pretoria (UP)", type: "university", province: "Gauteng", link: "www.up.ac.za" },
+            { name: "Stellenbosch University (SU)", type: "university", province: "Western Cape", link: "www.sun.ac.za" },
+            { name: "University of Johannesburg (UJ)", type: "university", province: "Gauteng", link: "www.uj.ac.za" },
+            { name: "University of KwaZulu-Natal (UKZN)", type: "university", province: "KwaZulu-Natal", link: "www.ukzn.ac.za" },
+            { name: "North-West University (NWU)", type: "university", province: "North West", link: "www.nwu.ac.za" },
+            { name: "University of South Africa (UNISA)", type: "university", province: "National", link: "www.unisa.ac.za" },
+            { name: "Rhodes University (RU)", type: "university", province: "Eastern Cape", link: "www.ru.ac.za" },
+            { name: "University of the Western Cape (UWC)", type: "university", province: "Western Cape", link: "www.uwc.ac.za" },
+            { name: "Nelson Mandela University (NMU)", type: "university", province: "Eastern Cape", link: "www.mandela.ac.za" },
+            { name: "University of the Free State (UFS)", type: "university", province: "Free State", link: "www.ufs.ac.za" },
+            { name: "University of Fort Hare (UFH)", type: "university", province: "Eastern Cape", link: "www.ufh.ac.za" },
+            { name: "University of Limpopo (UL)", type: "university", province: "Limpopo", link: "www.ul.ac.za" },
+            { name: "University of Venda (UNIVEN)", type: "university", province: "Limpopo", link: "www.univen.ac.za" },
+            { name: "University of Zululand (UNIZULU)", type: "university", province: "KwaZulu-Natal", link: "www.unizulu.ac.za" },
+            { name: "Walter Sisulu University (WSU)", type: "university", province: "Eastern Cape", link: "www.wsu.ac.za" },
+            { name: "Tshwane University of Technology (TUT)", type: "university", province: "Gauteng", link: "www.tut.ac.za" },
+            { name: "Central University of Technology (CUT)", type: "university", province: "Free State", link: "www.cut.ac.za" },
+            { name: "Durban University of Technology (DUT)", type: "university", province: "KwaZulu-Natal", link: "www.dut.ac.za" },
+            { name: "Mangosuthu University of Technology (MUT)", type: "university", province: "KwaZulu-Natal", link: "www.mut.ac.za" },
+            { name: "Vaal University of Technology (VUT)", type: "university", province: "Gauteng", link: "www.vut.ac.za" },
+            { name: "Cape Peninsula University of Technology (CPUT)", type: "university", province: "Western Cape", link: "www.cput.ac.za" },
+            { name: "University of Mpumalanga (UMP)", type: "university", province: "Mpumalanga", link: "www.ump.ac.za" },
+            { name: "Sol Plaatje University (SPU)", type: "university", province: "Northern Cape", link: "www.spu.ac.za" },
+            { name: "Sefako Makgatho Health Sciences University (SMU)", type: "university", province: "Gauteng", link: "www.smu.ac.za" },
+
+            // 50 PUBLIC TVET COLLEGES
+            { name: "Buffalo City TVET College", type: "tvet", province: "Eastern Cape", link: "www.bccollege.co.za" },
+            { name: "Eastcape Midlands College", type: "tvet", province: "Eastern Cape", link: "www.emcol.co.za" },
+            { name: "Ikhala TVET College", type: "tvet", province: "Eastern Cape", link: "www.ikhalacollege.co.za" },
+            { name: "Ingwe TVET College", type: "tvet", province: "Eastern Cape", link: "www.ingwecollege.edu.za" },
+            { name: "King Hintsa TVET College", type: "tvet", province: "Eastern Cape", link: "www.kinghintsacollege.edu.za" },
+            { name: "King Sabata Dalindyebo TVET College", type: "tvet", province: "Eastern Cape", link: "www.ksdcollege.edu.za" },
+            { name: "Lovedale TVET College", type: "tvet", province: "Eastern Cape", link: "www.lovedalecollege.co.za" },
+            { name: "Port Elizabeth TVET College", type: "tvet", province: "Eastern Cape", link: "www.pecollege.edu.za" },
+            { name: "Flavius Mareka TVET College", type: "tvet", province: "Free State", link: "www.flaviusmareka.net" },
+            { name: "Goldfields TVET College", type: "tvet", province: "Free State", link: "www.goldfieldstvet.edu.za" },
+            { name: "Maluti TVET College", type: "tvet", province: "Free State", link: "www.malutitvet.co.za" },
+            { name: "Motheo TVET College", type: "tvet", province: "Free State", link: "www.motheotvet.co.za" },
+            { name: "Central JHB TVET College", type: "tvet", province: "Gauteng", link: "www.cjc.edu.za" },
+            { name: "Ekurhuleni East TVET College", type: "tvet", province: "Gauteng", link: "www.eec.edu.za" },
+            { name: "Ekurhuleni West TVET College", type: "tvet", province: "Gauteng", link: "www.ewc.edu.za" },
+            { name: "Sedibeng TVET College", type: "tvet", province: "Gauteng", link: "www.sedcol.co.za" },
+            { name: "South West Gauteng TVET College", type: "tvet", province: "Gauteng", link: "www.swgc.co.za" },
+            { name: "Tshwane North TVET College", type: "tvet", province: "Gauteng", link: "www.tnc.edu.za" },
+            { name: "Tshwane South TVET College", type: "tvet", province: "Gauteng", link: "www.tsc.edu.za" },
+            { name: "Western TVET College", type: "tvet", province: "Gauteng", link: "www.westcol.co.za" },
+            { name: "Coastal KZN TVET College", type: "tvet", province: "KwaZulu-Natal", link: "www.coastalkzn.co.za" },
+            { name: "Elangeni TVET College", type: "tvet", province: "KwaZulu-Natal", link: "www.elangeni.edu.za" },
+            { name: "Esayidi TVET College", type: "tvet", province: "KwaZulu-Natal", link: "www.esayidifet.co.za" },
+            { name: "Majuba TVET College", type: "tvet", province: "KwaZulu-Natal", link: "www.majuba.edu.za" },
+            { name: "Mnambithi TVET College", type: "tvet", province: "KwaZulu-Natal", link: "www.mnambithicollege.co.za" },
+            { name: "Mthashana TVET College", type: "tvet", province: "KwaZulu-Natal", link: "www.mthashanacollege.co.za" },
+            { name: "Thekwini TVET College", type: "tvet", province: "KwaZulu-Natal", link: "www.thekwini.edu.za" },
+            { name: "Umfolozi TVET College", type: "tvet", province: "KwaZulu-Natal", link: "www.umfolozicollege.co.za" },
+            { name: "Umgungundlovu TVET College", type: "tvet", province: "KwaZulu-Natal", link: "www.utvet.co.za" },
+            { name: "Capricorn TVET College", type: "tvet", province: "Limpopo", link: "www.capricorncollege.edu.za" },
+            { name: "Lephalale TVET College", type: "tvet", province: "Limpopo", link: "www.lephalalefetcollege.co.za" },
+            { name: "Letaba TVET College", type: "tvet", province: "Limpopo", link: "www.letabafet.co.za" },
+            { name: "Mopani South East TVET College", type: "tvet", province: "Limpopo", link: "www.mopanicollege.edu.za" },
+            { name: "Sekhukhune TVET College", type: "tvet", province: "Limpopo", link: "www.sekfetcol.co.za" },
+            { name: "Vhembe TVET College", type: "tvet", province: "Limpopo", link: "www.vhembefet.co.za" },
+            { name: "Waterberg TVET College", type: "tvet", province: "Limpopo", link: "www.waterbergcollege.co.za" },
+            { name: "Ehlanzeni TVET College", type: "tvet", province: "Mpumalanga", link: "www.ehlanzenicollege.co.za" },
+            { name: "Gert Sibande TVET College", type: "tvet", province: "Mpumalanga", link: "www.gscollege.co.za" },
+            { name: "Nkangala TVET College", type: "tvet", province: "Mpumalanga", link: "www.nkangalafet.edu.za" },
+            { name: "Orbit TVET College", type: "tvet", province: "North West", link: "www.orbitcollege.co.za" },
+            { name: "Taletso TVET College", type: "tvet", province: "North West", link: "www.taletso.edu.za" },
+            { name: "Vuselela TVET College", type: "tvet", province: "North West", link: "www.vuselelacollege.co.za" },
+            { name: "Northern Cape Rural TVET College", type: "tvet", province: "Northern Cape", link: "www.ncrutvet.edu.za" },
+            { name: "Northern Cape Urban TVET College", type: "tvet", province: "Northern Cape", link: "www.ncucollege.edu.za" },
+            { name: "Boland TVET College", type: "tvet", province: "Western Cape", link: "www.bolandcollege.com" },
+            { name: "College of Cape Town TVET", type: "tvet", province: "Western Cape", link: "www.cct.edu.za" },
+            { name: "False Bay TVET College", type: "tvet", province: "Western Cape", link: "www.falsebaycollege.co.za" },
+            { name: "Northlink TVET College", type: "tvet", province: "Western Cape", link: "www.northlink.co.za" },
+            { name: "South Cape TVET College", type: "tvet", province: "Western Cape", link: "www.sccollege.co.za" },
+            { name: "West Coast TVET College", type: "tvet", province: "Western Cape", link: "www.westcoastcollege.co.za" },
+
+            // 38 PRIVATE INSTITUTIONS (leading/curated)
+            { name: "Eduvos", type: "private", province: "National", link: "www.eduvos.com" },
+            { name: "IIE Varsity College", type: "private", province: "National", link: "www.varsitycollege.co.za" },
+            { name: "IIE Rosebank College", type: "private", province: "National", link: "www.rosebankcollege.co.za" },
+            { name: "STADIO Higher Education", type: "private", province: "National", link: "www.stadio.ac.za" },
+            { name: "MANCOSA", type: "private", province: "National", link: "www.mancosa.co.za" },
+            { name: "Regent Business School", type: "private", province: "National", link: "www.regent.ac.za" },
+            { name: "Boston City Campus", type: "private", province: "National", link: "www.boston.co.za" },
+            { name: "Richfield Graduate Institute", type: "private", province: "National", link: "www.richfield.ac.za" },
+            { name: "AFDA Film Academy", type: "private", province: "National", link: "www.afda.co.za" },
+            { name: "IIE Vega School", type: "private", province: "National", link: "www.vegaschool.com" },
+            { name: "Milpark Education", type: "private", province: "National", link: "www.milpark.ac.za" },
+            { name: "Regenesys Business School", type: "private", province: "National", link: "www.regenesys.net" },
+            { name: "CTU Training Solutions", type: "private", province: "National", link: "www.ctutraining.ac.za" },
+            { name: "Belgium Campus iTversity", type: "private", province: "Gauteng", link: "www.belgiumcampus.ac.za" },
+            { name: "SACAP (Psychology)", type: "private", province: "National", link: "www.sacap.edu.za" },
+            { name: "TSIBA Business School", type: "private", province: "Western Cape", link: "www.tsiba.ac.za" },
+            { name: "Cornerstone Institute", type: "private", province: "Western Cape", link: "www.cornerstone.ac.za" },
+            { name: "Inscape Education Group", type: "private", province: "National", link: "www.inscape.ac" },
+            { name: "Red & Yellow Creative School", type: "private", province: "Western Cape", link: "www.redandyellow.co.za" },
+            { name: "AIE Academic Institute", type: "private", province: "National", link: "www.aie.ac" },
+            { name: "Berea College of Technology", type: "private", province: "KwaZulu-Natal", link: "www.bct.ac.za" },
+            { name: "AAA School of Advertising", type: "private", province: "National", link: "www.aaaschool.ac.za" },
+            { name: "Damelin", type: "private", province: "National", link: "www.damelin.co.za" },
+            { name: "Open Learning Group", type: "private", province: "National", link: "www.olg.co.za" },
+            { name: "ICSA Education", type: "private", province: "National", link: "www.icsa.edu.za" },
+            { name: "Oxbridge Academy", type: "private", province: "National", link: "www.oxbridgeacademy.edu.za" },
+            { name: "CityVarsity", type: "private", province: "National", link: "www.cityvarsity.co.za" },
+            { name: "International Hotel School", type: "private", province: "National", link: "www.hotelschool.co.za" },
+            { name: "Academy of Sound Engineering", type: "private", province: "National", link: "www.ase.co.za" },
+            { name: "SAE Institute South Africa", type: "private", province: "National", link: "www.sae.edu.za" },
+            { name: "Henley Business School Africa", type: "private", province: "Gauteng", link: "www.henleysa.ac.za" },
+            { name: "IMM Graduate School", type: "private", province: "National", link: "www.imm.ac.za" },
+            { name: "Da Vinci Institute", type: "private", province: "National", link: "www.davinci.ac.za" },
+            { name: "IIE MSA", type: "private", province: "Gauteng", link: "www.iiemsa.ac.za" },
+            { name: "Helderberg College", type: "private", province: "Western Cape", link: "www.hbc.ac.za" },
+            { name: "Baptist Theological College", type: "private", province: "Gauteng", link: "www.btc.co.za" },
+            { name: "Southern Business School", type: "private", province: "National", link: "www.sbs.ac.za" }
+        ];
+
+        let activeFilter = 'all';
+
+        function displayColleges(data) {
+            const grid = document.getElementById('collegeGrid');
+            const totalCount = document.getElementById('totalCount');
+            totalCount.innerText = data.length;
+            
+            grid.innerHTML = data.map(inst => `
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm card-hover transition-all flex flex-col">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${getTypeStyle(inst.type)}">
+                                ${inst.type === 'tvet' ? 'TVET College' : inst.type.charAt(0).toUpperCase() + inst.type.slice(1)}
+                            </span>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300">
+                                <i class="fas ${inst.type === 'university' ? 'fa-building-columns' : (inst.type === 'tvet' ? 'fa-tools' : 'fa-certificate')}"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-slate-900 mb-2 leading-tight">${inst.name}</h3>
+                        <p class="text-slate-500 text-xs mb-6 flex items-center gap-2 font-semibold">
+                            <i class="fas fa-location-dot text-blue-500"></i> ${inst.province}
+                        </p>
+                    </div>
+                    <a href="https://${inst.link}" target="_blank" class="w-full py-4 rounded-2xl bg-slate-900 text-white text-center text-xs font-bold hover:bg-blue-600 transition-colors">
+                        Official Website <i class="fas fa-external-link-alt ml-2 opacity-50"></i>
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        function getTypeStyle(type) {
+            if (type === 'university') return 'bg-blue-100 text-blue-700';
+            if (type === 'tvet') return 'bg-emerald-100 text-emerald-700';
+            return 'bg-purple-100 text-purple-700';
+        }
+
+        function filterColleges() {
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            const prov = document.getElementById('provinceFilter').value;
+            
+            const filtered = institutions.filter(i => {
+                const matchesSearch = i.name.toLowerCase().includes(term);
+                const matchesType = activeFilter === 'all' || i.type === activeFilter;
+                const matchesProv = prov === 'all' || i.province === prov;
+                return matchesSearch && matchesType && matchesProv;
+            });
+            displayColleges(filtered);
+        }
+
+        function setFilter(filter) {
+            if (activeFilter === filter) {
+                activeFilter = 'all';
+            } else {
+                activeFilter = filter;
+            }
+            filterColleges();
+        }
+
+        // Initialize
+        displayColleges(institutions);
+    </script>
+</body>
+</html>
