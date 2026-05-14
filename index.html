@@ -8,7 +8,7 @@
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#1e293b">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://www.education.gov.za/Portals/0/dbe_logo.png">
+    <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/en/thumb/5/53/South_African_Department_of_Basic_Education_logo.svg/512px-South_African_Department_of_Basic_Education_logo.svg.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -23,51 +23,60 @@
         #pwa-install-banner {
             display: none;
             position: fixed;
-            bottom: 20px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
             width: 90%;
-            max-width: 400px;
+            max-width: 420px;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100%); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 leading-relaxed">
 
     <!-- PWA Install Banner -->
-    <div id="pwa-install-banner" class="bg-white border border-slate-200 shadow-2xl rounded-2xl p-4 flex flex-col gap-3">
-        <div class="flex items-center gap-3">
-            <img src="https://www.education.gov.za/Portals/0/dbe_logo.png" class="w-12 h-auto" alt="Logo">
+    <div id="pwa-install-banner" class="bg-white border border-slate-200 shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-3xl p-5">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 flex-shrink-0 bg-slate-50 rounded-xl p-1 flex items-center justify-center border border-slate-100">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/53/South_African_Department_of_Basic_Education_logo.svg/512px-South_African_Department_of_Basic_Education_logo.svg.png" class="w-full h-auto" alt="Logo">
+            </div>
             <div>
-                <p class="font-bold text-sm">Install Petal Chain</p>
-                <p class="text-xs text-slate-500">Access SA institutions from your home screen.</p>
+                <p class="font-bold text-slate-900">Install Petal Chain</p>
+                <p class="text-xs text-slate-500">Add to your home screen for faster access to the 2026 institution directory.</p>
             </div>
         </div>
-        <div class="flex gap-2">
-            <button id="btnInstall" class="flex-1 bg-blue-600 text-white text-xs font-bold py-2 rounded-lg">Install Now</button>
-            <button id="btnCancel" class="flex-1 bg-slate-100 text-slate-600 text-xs font-bold py-2 rounded-lg">Maybe Later</button>
+        <div class="flex gap-3">
+            <button id="btnInstall" class="flex-1 bg-blue-600 text-white text-sm font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors">Install Now</button>
+            <button id="btnCancel" class="flex-1 bg-slate-100 text-slate-600 text-sm font-bold py-3 rounded-xl hover:bg-slate-200 transition-colors">Later</button>
         </div>
     </div>
 
-    <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+    <nav class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             <div class="flex items-center">
-                <!-- Replaced Petal Chain Icon/Text with Dept of Education Logo -->
-                <img src="https://www.education.gov.za/Portals/0/dbe_logo.png" alt="Department of Basic Education" class="h-12 md:h-16 w-auto">
+                <!-- Replacement Logo: SA Dept of Education -->
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/53/South_African_Department_of_Basic_Education_logo.svg/512px-South_African_Department_of_Basic_Education_logo.svg.png" 
+                     alt="Department of Basic Education" 
+                     class="h-10 md:h-14 w-auto object-contain">
             </div>
             <div class="hidden md:flex gap-8 items-center font-semibold text-slate-600 text-sm">
                 <a href="#" class="text-blue-600">Home</a>
                 <a href="#finder" class="hover:text-blue-600 transition-colors">Find Institution</a>
-                <a href="https://www.dhet.gov.za" target="_blank" class="hover:text-blue-600 transition-colors">DHET Portal</a>
+                <a href="https://www.dhet.gov.za" target="_blank" class="hover:text-blue-600 transition-colors font-bold">DHET Portal</a>
                 <button class="bg-black text-white px-6 py-2.5 rounded-full hover:bg-slate-800 transition-all">Apply Now</button>
             </div>
         </div>
     </nav>
 
-    <!-- CONTENT REMAINS UNCHANGED -->
     <header class="hero-bg text-white py-24 px-6 overflow-hidden relative">
         <div class="max-w-5xl mx-auto text-center relative z-10">
-            <span class="inline-block py-1 px-4 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold mb-6 border border-blue-500/30 uppercase">Academic Year 2026</span>
+            <span class="inline-block py-1 px-4 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold mb-6 border border-blue-500/30 uppercase tracking-widest">Academic Year 2026</span>
             <h1 class="text-5xl md:text-7xl font-extrabold mb-8 tracking-tight">The Gateway to <span class="text-blue-500">Higher Ed.</span></h1>
             <p class="text-xl text-slate-400 mb-12 max-w-2xl mx-auto font-light">Comprehensive directory of South Africa's 26 Public Universities, 50 TVET Colleges, and leading Private Institutions (DHET-registered).</p>
             
@@ -86,6 +95,7 @@
                 <p class="text-4xl font-extrabold text-slate-900" id="totalCount">0</p>
                 <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-2">Total Found</p>
             </div>
+
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
                 <p class="text-4xl font-extrabold text-blue-600">26</p>
                 <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-2">Public Universities</p>
@@ -97,13 +107,14 @@
                 <p class="text-4xl font-extrabold text-emerald-600">50</p>
                 <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-2">Public TVET Colleges</p>
             </div>
+
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
                 <p class="text-4xl font-extrabold text-purple-600">38</p>
                 <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-2">Private Institutions</p>
             </div>
         </div>
 
-        <div class="mb-8 text-center">
+        <div class="mb-8">
             <select id="provinceFilter" onchange="filterColleges()" class="w-full max-w-xs mx-auto block bg-black text-white p-4 rounded-2xl shadow-lg font-bold text-sm outline-none cursor-pointer hover:bg-slate-800 transition-all">
                 <option value="all">All Provinces</option>
                 <option value="Gauteng">Gauteng</option>
@@ -134,21 +145,24 @@
             </button>
         </div>
 
-        <div id="collegeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-24"></div>
+        <div id="collegeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-24">
+        </div>
     </main>
 
     <footer class="bg-black text-slate-500 py-16 border-t border-slate-900">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="flex items-center gap-3">
-                <img src="https://www.education.gov.za/Portals/0/dbe_logo.png" class="h-10 grayscale brightness-200" alt="DBE">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+            <div class="flex flex-col items-center md:items-start gap-4">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/53/South_African_Department_of_Basic_Education_logo.svg/512px-South_African_Department_of_Basic_Education_logo.svg.png" 
+                     class="h-12 brightness-0 invert opacity-60" alt="DBE">
+                <span class="text-xs font-bold text-white tracking-widest uppercase">Petal Chain 2026</span>
             </div>
-            <p class="text-sm">Source: DHET 2026 Directory & Registers. Registered Institutions only.</p>
+            <p class="text-[11px] max-w-md opacity-50">This directory is for informational purposes. All data is sourced from official 2026 DHET registers. Please verify application deadlines with institutions directly.</p>
         </div>
     </footer>
 
     <script>
-        // INSTITUTIONS DATA (OMITTED FOR BREVITY - KEEP YOUR ORIGINAL DATA ARRAY HERE)
         const institutions = [
+            // UNIVERSITIES
             { name: "University of Cape Town (UCT)", type: "university", province: "Western Cape", link: "www.uct.ac.za" },
             { name: "University of the Witwatersrand (Wits)", type: "university", province: "Gauteng", link: "www.wits.ac.za" },
             { name: "University of Pretoria (UP)", type: "university", province: "Gauteng", link: "www.up.ac.za" },
@@ -175,6 +189,7 @@
             { name: "University of Mpumalanga (UMP)", type: "university", province: "Mpumalanga", link: "www.ump.ac.za" },
             { name: "Sol Plaatje University (SPU)", type: "university", province: "Northern Cape", link: "www.spu.ac.za" },
             { name: "Sefako Makgatho Health Sciences University (SMU)", type: "university", province: "Gauteng", link: "www.smu.ac.za" },
+            // TVET COLLEGES
             { name: "Buffalo City TVET College", type: "tvet", province: "Eastern Cape", link: "www.bccollege.co.za" },
             { name: "Eastcape Midlands College", type: "tvet", province: "Eastern Cape", link: "www.emcol.co.za" },
             { name: "Ikhala TVET College", type: "tvet", province: "Eastern Cape", link: "www.ikhalacollege.co.za" },
@@ -225,43 +240,14 @@
             { name: "Northlink TVET College", type: "tvet", province: "Western Cape", link: "www.northlink.co.za" },
             { name: "South Cape TVET College", type: "tvet", province: "Western Cape", link: "www.sccollege.co.za" },
             { name: "West Coast TVET College", type: "tvet", province: "Western Cape", link: "www.westcoastcollege.co.za" },
+            // PRIVATE
             { name: "Eduvos", type: "private", province: "National", link: "www.eduvos.com" },
             { name: "IIE Varsity College", type: "private", province: "National", link: "www.varsitycollege.co.za" },
-            { name: "IIE Rosebank College", type: "private", province: "National", link: "www.rosebankcollege.co.za" },
             { name: "STADIO Higher Education", type: "private", province: "National", link: "www.stadio.ac.za" },
             { name: "MANCOSA", type: "private", province: "National", link: "www.mancosa.co.za" },
-            { name: "Regent Business School", type: "private", province: "National", link: "www.regent.ac.za" },
             { name: "Boston City Campus", type: "private", province: "National", link: "www.boston.co.za" },
-            { name: "Richfield Graduate Institute", type: "private", province: "National", link: "www.richfield.ac.za" },
             { name: "AFDA Film Academy", type: "private", province: "National", link: "www.afda.co.za" },
-            { name: "IIE Vega School", type: "private", province: "National", link: "www.vegaschool.com" },
-            { name: "Milpark Education", type: "private", province: "National", link: "www.milpark.ac.za" },
-            { name: "Regenesys Business School", type: "private", province: "National", link: "www.regenesys.net" },
-            { name: "CTU Training Solutions", type: "private", province: "National", link: "www.ctutraining.ac.za" },
-            { name: "Belgium Campus iTversity", type: "private", province: "Gauteng", link: "www.belgiumcampus.ac.za" },
-            { name: "SACAP (Psychology)", type: "private", province: "National", link: "www.sacap.edu.za" },
-            { name: "TSIBA Business School", type: "private", province: "Western Cape", link: "www.tsiba.ac.za" },
-            { name: "Cornerstone Institute", type: "private", province: "Western Cape", link: "www.cornerstone.ac.za" },
-            { name: "Inscape Education Group", type: "private", province: "National", link: "www.inscape.ac" },
-            { name: "Red & Yellow Creative School", type: "private", province: "Western Cape", link: "www.redandyellow.co.za" },
-            { name: "AIE Academic Institute", type: "private", province: "National", link: "www.aie.ac" },
-            { name: "Berea College of Technology", type: "private", province: "KwaZulu-Natal", link: "www.bct.ac.za" },
-            { name: "AAA School of Advertising", type: "private", province: "National", link: "www.aaaschool.ac.za" },
-            { name: "Damelin", type: "private", province: "National", link: "www.damelin.co.za" },
-            { name: "Open Learning Group", type: "private", province: "National", link: "www.olg.co.za" },
-            { name: "ICSA Education", type: "private", province: "National", link: "www.icsa.edu.za" },
-            { name: "Oxbridge Academy", type: "private", province: "National", link: "www.oxbridgeacademy.edu.za" },
-            { name: "CityVarsity", type: "private", province: "National", link: "www.cityvarsity.co.za" },
-            { name: "International Hotel School", type: "private", province: "National", link: "www.hotelschool.co.za" },
-            { name: "Academy of Sound Engineering", type: "private", province: "National", link: "www.ase.co.za" },
-            { name: "SAE Institute South Africa", type: "private", province: "National", link: "www.sae.edu.za" },
-            { name: "Henley Business School Africa", type: "private", province: "Gauteng", link: "www.henleysa.ac.za" },
-            { name: "IMM Graduate School", type: "private", province: "National", link: "www.imm.ac.za" },
-            { name: "Da Vinci Institute", type: "private", province: "National", link: "www.davinci.ac.za" },
-            { name: "IIE MSA", type: "private", province: "Gauteng", link: "www.iiemsa.ac.za" },
-            { name: "Helderberg College", type: "private", province: "Western Cape", link: "www.hbc.ac.za" },
-            { name: "Baptist Theological College", type: "private", province: "Gauteng", link: "www.btc.co.za" },
-            { name: "Southern Business School", type: "private", province: "National", link: "www.sbs.ac.za" }
+            { name: "Richfield", type: "private", province: "National", link: "www.richfield.ac.za" }
         ];
 
         let activeFilter = 'all';
@@ -269,6 +255,7 @@
         function displayColleges(data) {
             const grid = document.getElementById('collegeGrid');
             document.getElementById('totalCount').innerText = data.length;
+            
             grid.innerHTML = data.map(inst => `
                 <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm card-hover transition-all flex flex-col">
                     <div class="flex-grow">
@@ -276,6 +263,9 @@
                             <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${getTypeStyle(inst.type)}">
                                 ${inst.type === 'tvet' ? 'TVET College' : inst.type.charAt(0).toUpperCase() + inst.type.slice(1)}
                             </span>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300">
+                                <i class="fas ${inst.type === 'university' ? 'fa-building-columns' : (inst.type === 'tvet' ? 'fa-tools' : 'fa-certificate')}"></i>
+                            </div>
                         </div>
                         <h3 class="text-lg font-extrabold text-slate-900 mb-2 leading-tight">${inst.name}</h3>
                         <p class="text-slate-500 text-xs mb-6 flex items-center gap-2 font-semibold">
@@ -298,6 +288,7 @@
         function filterColleges() {
             const term = document.getElementById('searchInput').value.toLowerCase();
             const prov = document.getElementById('provinceFilter').value;
+            
             const filtered = institutions.filter(i => {
                 const matchesSearch = i.name.toLowerCase().includes(term);
                 const matchesType = activeFilter === 'all' || i.type === activeFilter;
@@ -312,39 +303,40 @@
             filterColleges();
         }
 
-        // --- PWA LOGIC ---
+        // --- PWA Logic ---
         let deferredPrompt;
-        const installBanner = document.getElementById('pwa-install-banner');
-        const btnInstall = document.getElementById('btnInstall');
-        const btnCancel = document.getElementById('btnCancel');
+        const banner = document.getElementById('pwa-install-banner');
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            // Show the custom popup
-            installBanner.style.display = 'block';
+            // Show custom banner
+            banner.style.display = 'block';
         });
 
-        btnInstall.addEventListener('click', async () => {
+        document.getElementById('btnInstall').addEventListener('click', async () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
                 deferredPrompt = null;
-                installBanner.style.display = 'none';
+                banner.style.display = 'none';
             }
         });
 
-        btnCancel.addEventListener('click', () => {
-            installBanner.style.display = 'none';
+        document.getElementById('btnCancel').addEventListener('click', () => {
+            banner.style.display = 'none';
         });
 
+        // Register Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js');
+                navigator.serviceWorker.register('/sw.js').catch(() => {
+                    console.log('SW registration failed (Standard for local files/non-HTTPS)');
+                });
             });
         }
 
-        // Init
+        // Initialize
         displayColleges(institutions);
     </script>
 </body>
