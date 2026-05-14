@@ -11,7 +11,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Petal Chain">
     
-    <!-- Manifest Link -->
+    <!-- Manifest (Base64 encoded with icons and PWA settings) -->
     <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIlBldGFsIENoYWluIiwKICAic2hvcnRfbmFtZSI6ICJQZXRhbCBDaGFpbiIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZmZmZmZmIiwKICAidGhlbWVfY29sb3IiOiAiIzI1NjNlYiIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc25nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBRXdBQUFST0NBTVFBQUQwTThLMEFBQUFSMVBMVUVmUjhKWm1Zdkx6Lys3dTR2TDgvLy8vOWZYNVB2LzlyYm01dVpqNDlQajRvS0NnbzI5dmIzOC9QLzlmaTR1TGpKeDR1TGk0dUxrSnhjd0FBQUFCRDBRUkU5dUJHYm9BQUFBRVhSRldIUlRiMjUwZDJsdVp3QUFBQUJKUlU1RXJrSmdnZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ==">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -22,9 +22,38 @@
         .hero-bg { background: radial-gradient(circle at top right, #1e293b, #000000); }
         .card-hover:hover { transform: translateY(-8px); border-color: #3b82f6; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
         select { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1.5em 1.5em; }
+        
+        /* PWA Install Prompt Styles */
+        #installPrompt {
+            display: none;
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            width: calc(100% - 40px);
+            max-width: 400px;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 leading-relaxed">
+
+    <!-- Installation Popup -->
+    <div id="installPrompt" class="bg-white border border-slate-200 shadow-2xl rounded-3xl p-6 animate-bounce-in">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-200">
+                <i class="fas fa-link text-white text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900">Install Petal Chain</h4>
+                <p class="text-xs text-slate-500">Add to home screen for faster access to SA institutions.</p>
+            </div>
+        </div>
+        <div class="flex gap-3">
+            <button id="btnInstall" class="flex-1 bg-blue-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-700 transition-all">Install Now</button>
+            <button onclick="dismissInstall()" class="px-5 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold text-sm hover:bg-slate-200 transition-all">Later</button>
+        </div>
+    </div>
 
     <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
@@ -59,12 +88,12 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-6 -mt-10 relative z-20">
+        <!-- Stats -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
                 <p class="text-4xl font-extrabold text-slate-900" id="totalCount">0</p>
                 <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-2">Total Found</p>
             </div>
-
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
                 <p class="text-4xl font-extrabold text-blue-600">26</p>
                 <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-2">Public Universities</p>
@@ -76,13 +105,13 @@
                 <p class="text-4xl font-extrabold text-emerald-600">50</p>
                 <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-2">Public TVET Colleges</p>
             </div>
-
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
                 <p class="text-4xl font-extrabold text-purple-600">38</p>
                 <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-2">Private Institutions</p>
             </div>
         </div>
 
+        <!-- Filters -->
         <div class="mb-8">
             <select id="provinceFilter" onchange="filterColleges()" class="w-full max-w-xs mx-auto block bg-black text-white p-4 rounded-2xl shadow-lg font-bold text-sm outline-none cursor-pointer hover:bg-slate-800 transition-all">
                 <option value="all">All Provinces</option>
@@ -125,7 +154,7 @@
                 </div>
                 <span class="text-xl font-bold text-white tracking-tighter">Petal Chain</span>
             </div>
-            <p class="text-sm">Source: DHET 2026 Directory & Registers. Registered Institutions only.</p>
+            <p class="text-sm">Source: DHET 2026 Directory. Registered Institutions only.</p>
         </div>
     </footer>
 
@@ -299,22 +328,50 @@
             filterColleges();
         }
 
-        // --- PWA SERVICE WORKER REGISTRATION ---
+        // --- PWA LOGIC & INSTALL PROMPT ---
+        let deferredPrompt;
+        const installPopup = document.getElementById('installPrompt');
+        const btnInstall = document.getElementById('btnInstall');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+            // Update UI notify the user they can install the PWA
+            installPopup.style.display = 'block';
+        });
+
+        btnInstall.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                }
+                deferredPrompt = null;
+                installPopup.style.display = 'none';
+            }
+        });
+
+        function dismissInstall() {
+            installPopup.style.display = 'none';
+        }
+
+        // Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 const swCode = `
-                    const CACHE_NAME = 'petal-chain-v1';
-                    const urlsToCache = ['/', window.location.href];
-                    self.addEventListener('install', event => {
-                        event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)));
+                    const CACHE_NAME = 'petal-v2';
+                    self.addEventListener('install', e => {
+                        e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['/', window.location.href])));
                     });
-                    self.addEventListener('fetch', event => {
-                        event.respondWith(caches.match(event.request).then(response => response || fetch(event.request)));
+                    self.addEventListener('fetch', e => {
+                        e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
                     });
                 `;
                 const blob = new Blob([swCode], { type: 'application/javascript' });
-                const swUrl = URL.createObjectURL(blob);
-                navigator.serviceWorker.register(swUrl).catch(err => console.log('SW failed', err));
+                navigator.serviceWorker.register(URL.createObjectURL(blob));
             });
         }
 
